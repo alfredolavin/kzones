@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "kzones-zone-editor"
+version = "0.1.0"
+description = "Standalone visual editor for KZones layout JSON"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "GPL-3.0-only" }
+authors = [{ name = "gerritdevriese" }]
+dependencies = ["PyQt6>=6.4"]
+
+[project.urls]
+Homepage = "https://github.com/gerritdevriese/kzones"
+
+[project.scripts]
+kzones-zone-editor = "kzones_zone_editor.app:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/kzones_zone_editor"]

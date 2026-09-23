@@ -9,7 +9,7 @@ SESSION_APPLICATIONS := # dolphin konsole kate
 
 .NOTPARALLEL: all
 
-.PHONY: all test build install uninstall clean enable disable start-session help
+.PHONY: all test build install uninstall clean enable disable start-session help zone-editor
 
 all: install clean
 
@@ -86,6 +86,10 @@ unload:
 
 reload: unload load
 
+zone-editor:
+	@command -v kzones-zone-editor >/dev/null 2>&1 && kzones-zone-editor || \
+		(echo "kzones-zone-editor not installed, run: pipx install ./tools/zone-editor" && exit 1)
+
 help:
 	@echo "Makefile commands:"
 	@echo "  all            - Build and install the script (default)"
@@ -102,3 +106,4 @@ help:
 	@echo "  load           - Load the script for testing"
 	@echo "  unload         - Unload the test script"
 	@echo "  reload         - Reload the test script"
+	@echo "  zone-editor    - Launch the standalone visual zone editor (pipx install ./tools/zone-editor)"

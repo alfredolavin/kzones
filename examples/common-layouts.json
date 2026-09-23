@@ -1,0 +1,93 @@
+[
+  {
+    "name": "Halves",
+    "padding": 0,
+    "zones": [
+      { "x": 0, "y": 0, "width": 50, "height": 100 },
+      { "x": 50, "y": 0, "width": 50, "height": 100 }
+    ]
+  },
+  {
+    "name": "Vertical Halves",
+    "padding": 0,
+    "zones": [
+      { "x": 0, "y": 0, "width": 100, "height": 50 },
+      { "x": 0, "y": 50, "width": 100, "height": 50 }
+    ]
+  },
+  {
+    "name": "Thirds",
+    "padding": 0,
+    "zones": [
+      { "x": 0, "y": 0, "width": 34, "height": 100 },
+      { "x": 34, "y": 0, "width": 33, "height": 100 },
+      { "x": 67, "y": 0, "width": 33, "height": 100 }
+    ]
+  },
+  {
+    "name": "Left Focus",
+    "padding": 0,
+    "zones": [
+      { "x": 0, "y": 0, "width": 67, "height": 100 },
+      { "x": 67, "y": 0, "width": 33, "height": 100 }
+    ]
+  },
+  {
+    "name": "Right Focus",
+    "padding": 0,
+    "zones": [
+      { "x": 0, "y": 0, "width": 33, "height": 100 },
+      { "x": 33, "y": 0, "width": 67, "height": 100 }
+    ]
+  },
+  {
+    "name": "Quadrants",
+    "padding": 0,
+    "zones": [
+      { "x": 0, "y": 0, "width": 50, "height": 50 },
+      { "x": 50, "y": 0, "width": 50, "height": 50 },
+      { "x": 0, "y": 50, "width": 50, "height": 50 },
+      { "x": 50, "y": 50, "width": 50, "height": 50 }
+    ]
+  },
+  {
+    "name": "Priority Grid",
+    "padding": 0,
+    "zones": [
+      { "x": 0, "y": 0, "width": 25, "height": 100 },
+      { "x": 25, "y": 0, "width": 50, "height": 100 },
+      { "x": 75, "y": 0, "width": 25, "height": 100 }
+    ]
+  },
+  {
+    "name": "Columns",
+    "padding": 0,
+    "zones": [
+      { "x": 0, "y": 0, "width": 25, "height": 100 },
+      { "x": 25, "y": 0, "width": 25, "height": 100 },
+      { "x": 50, "y": 0, "width": 25, "height": 100 },
+      { "x": 75, "y": 0, "width": 25, "height": 100 }
+    ]
+  },
+  {
+    "name": "Grid 3x2",
+    "padding": 0,
+    "zones": [
+      { "x": 0, "y": 0, "width": 34, "height": 50 },
+      { "x": 34, "y": 0, "width": 33, "height": 50 },
+      { "x": 67, "y": 0, "width": 33, "height": 50 },
+      { "x": 0, "y": 50, "width": 34, "height": 50 },
+      { "x": 34, "y": 50, "width": 33, "height": 50 },
+      { "x": 67, "y": 50, "width": 33, "height": 50 }
+    ]
+  },
+  {
+    "name": "Focus + Stack",
+    "padding": 0,
+    "zones": [
+      { "x": 0, "y": 0, "width": 67, "height": 100 },
+      { "x": 67, "y": 0, "width": 33, "height": 50 },
+      { "x": 67, "y": 50, "width": 33, "height": 50 }
+    ]
+  }
+]
