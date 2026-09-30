@@ -1,0 +1,4 @@
+[submodule "settings/qml/colorspec"]
+	path = settings/qml/colorspec
+	url = git@github.com:alfredolavin/colorspec.git
+	branch = main
