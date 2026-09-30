@@ -7,6 +7,10 @@ Rectangle {
     property int activeZone: 0
     property bool hovering: false
     property var zones: []
+    property var config
+    // for the colors: where `zones` starts among the layout's zones, and how many the layout has
+    property int baseIndex: 0
+    property int total: zones.length
 
     width: parent.width
     height: parent.height
@@ -32,13 +36,14 @@ Rectangle {
 
                 anchors.fill: parent
                 anchors.margins: padding
+                property var ctx: colorHelper.zoneCtx(modelData, indicator.baseIndex + index, indicator.total)
                 color: {
                     if (activeZone == index)
-                        return modelData.color ? colorHelper.tintWithAlpha(colorHelper.buttonColor, modelData.color, 0.6) : colorHelper.accentColor;
+                        return colorHelper.pick(config, "miniZoneActive", modelData.color ? colorHelper.tintWithAlpha(colorHelper.buttonColor, modelData.color, 0.6) : colorHelper.accentColor, ctx);
                     else
-                        return modelData.color ? colorHelper.tintWithAlpha(colorHelper.buttonColor, modelData.color, 0.2) : colorHelper.buttonColor;
+                        return colorHelper.pick(config, "miniZone", modelData.color ? colorHelper.tintWithAlpha(colorHelper.buttonColor, modelData.color, 0.2) : colorHelper.buttonColor, ctx);
                 }
-                border.color: colorHelper.getBorderColor(color)
+                border.color: colorHelper.pick(config, "miniZoneBorder", colorHelper.getBorderColor(color), ctx)
                 border.width: 1
                 radius: 5
 

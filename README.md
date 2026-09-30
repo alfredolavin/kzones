@@ -131,6 +131,18 @@ Reduce the opacity of other windows while the active window is being moved.
 
 - Enable or disable this behavior.
 
+### QML settings and Customization
+
+KWin only lets a script's own settings page be a Qt Widgets `.ui` file, so the QML settings live in a small companion
+app (`make settings`, or `python3 settings/kzones_settings.py`; needs PyQt6). It edits the same `kwinrc` keys as the
+built-in page, adds a **Customization** tab, and can reload the script to apply changes.
+
+Customization sets the color of every part of the overlay (selector background/border/shadow, zone indicator
+background/border, the zones drawn inside the indicators, and the zone highlight border/fill). Each is a color that is
+either the default look, a fixed color, or a **vivid** OKLCH color derived from the zone's index or its position on the
+screen (horizontal, vertical or diagonal), adjustable in luminosity, chroma, hue offset and opacity. The color selector
+is the shared `colorspec` library (`plasmoids/shared`, copied in by `shared/sync.sh`).
+
 ### Layouts
 
 You can define your own layouts by modifying the JSON in the **Layouts** tab in the script settings, here are some examples to get you started:

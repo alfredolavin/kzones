@@ -28,9 +28,9 @@ Item {
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottomMargin: 15
-        color: colorHelper.backgroundColor
+        color: colorHelper.pick(config, "selectorBackground", colorHelper.backgroundColor)
         radius: 10
-        border.color: colorHelper.getBorderColor(color)
+        border.color: colorHelper.pick(config, "selectorBorder", colorHelper.getBorderColor(color))
         border.width: 1
 
         RowLayout {
@@ -47,6 +47,7 @@ Item {
 
                 Components.Indicator {
                     zones: modelData.zones
+                    config: selector.config
                     activeZone: (currentLayout == index) ? highlightedZone : -1
                     width: 160 - 30
                     height: 100 - 30
@@ -61,6 +62,7 @@ Item {
 
     Components.Shadow {
         target: background
+        config: selector.config
         visible: true
     }
 

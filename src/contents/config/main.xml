@@ -124,6 +124,35 @@
             </default>
         </entry>
 
+        <!-- Customization (edited in the QML settings app, settings/) -->
+
+        <!-- JSON map: entity -> color spec (see code/Theming.js); empty = default look -->
+        <entry name="colorSpecs" type="String">
+            <default>{}</default>
+        </entry>
+
+        <!-- 0 zone index, 1 horizontal position, 2 vertical position, 3 diagonal position -->
+        <entry name="colorizeBy" type="Int">
+            <default>0</default>
+        </entry>
+
+        <!-- vivid colors: OKLCH lightness and chroma in % (chroma 17 = 0.17), first hue and hue span in degrees -->
+        <entry name="vividLightness" type="Int">
+            <default>72</default>
+        </entry>
+
+        <entry name="vividChroma" type="Int">
+            <default>17</default>
+        </entry>
+
+        <entry name="vividHueStart" type="Int">
+            <default>20</default>
+        </entry>
+
+        <entry name="vividHueRange" type="Int">
+            <default>360</default>
+        </entry>
+
         <!-- Filters -->
 
         <entry name="filterMode" type="Int">
