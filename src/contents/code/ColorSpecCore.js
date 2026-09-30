@@ -87,15 +87,51 @@ function rgbToOklab(c) {
              b: 0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s };
 }
 
-// OKLab -> sRGB; out-of-gamut colors are clipped per channel, like browsers render them
-function oklabToRgb(L, A, B, alpha) {
+// Linear (unclamped) sRGB from OKLab
+function oklabToLinear(L, A, B) {
     var l = Math.pow(L + 0.3963377774 * A + 0.2158037573 * B, 3);
     var m = Math.pow(L - 0.1055613458 * A - 0.0638541728 * B, 3);
     var s = Math.pow(L - 0.0894841775 * A - 1.2914855480 * B, 3);
-    var rgb = [4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
-               -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
-               -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s];
+    return [4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+            -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+            -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s];
+}
+
+// OKLab -> sRGB; out-of-gamut colors are clipped per channel, like browsers render them
+function oklabToRgb(L, A, B, alpha) {
+    var rgb = oklabToLinear(L, A, B);
     return { r: toGamma(clamp(rgb[0], 0, 1)), g: toGamma(clamp(rgb[1], 0, 1)), b: toGamma(clamp(rgb[2], 0, 1)), a: alpha };
+}
+
+// OKLCH (lightness 0..1, chroma ~0..0.4, hue in degrees) -> sRGB. Chroma is lowered until the color fits
+// the sRGB gamut, so the hue and lightness stay true (the most vivid color that can be shown)
+function oklch(L, C, hueDeg, alpha) {
+    var hr = hueDeg * Math.PI / 180, cs = Math.cos(hr), sn = Math.sin(hr);
+    L = clamp(L, 0, 1);
+    function fits(c) {
+        var rgb = oklabToLinear(L, c * cs, c * sn);
+        return rgb[0] >= -0.0005 && rgb[0] <= 1.0005 && rgb[1] >= -0.0005 && rgb[1] <= 1.0005 && rgb[2] >= -0.0005 && rgb[2] <= 1.0005;
+    }
+    var lo = 0, hi = Math.max(0, C);
+    if (!fits(hi)) {
+        for (var i = 0; i < 18; ++i) {
+            var mid = (lo + hi) / 2;
+            if (fits(mid)) lo = mid; else hi = mid;
+        }
+        hi = lo;
+    }
+    return oklabToRgb(L, hi * cs, hi * sn, alpha === undefined ? 1 : alpha);
+}
+
+// A vivid color for an entity, from the settings `v` = { by, lightness, chroma, hueStart, hueRange }
+// (lightness and chroma 0..100, angles in degrees) and where the entity is: `ctx` = { index, count, x, y }
+// with x and y (0..1) its center on the screen. `by`: 0 index, 1 horizontal, 2 vertical, 3 diagonal position.
+function vivid(v, ctx) {
+    var by = Number(v.by) || 0;
+    var t = by === 1 ? ctx.x : by === 2 ? ctx.y : by === 3 ? (ctx.x + ctx.y) / 2
+          : (ctx.count > 1 ? ctx.index / ctx.count : 0);
+    return oklch(clamp(Number(v.lightness), 0, 100) / 100, clamp(Number(v.chroma), 0, 100) / 100 * 0.4,
+                 Number(v.hueStart) + Number(v.hueRange) * clamp(t, 0, 1), 1);
 }
 
 // `c` adjusted in OKLCH, alpha kept. Luminosity (-100..100) moves lightness toward 0 or 1; chroma (-100..100)
