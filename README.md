@@ -97,12 +97,25 @@ Edge Snapping allows you to snap windows to zones by dragging them to the edge o
 - Enable or disable edge snapping.
 - Set the distance from the edge of the screen at which the edge snapping will start to appear.
 
+#### Window Snapping Guides
+
+KWin can magnetically snap a window you move against the edges of other windows (`System Settings / Window Management / Window Behavior / Movement / Window snap zone`). With the snapping guides enabled, KZones shows which window it is snapping to. The settings are in the "Snapping Guides" tab.
+
+- Enable or disable the guides.
+- Choose the effect:
+  - Highlight the window: the window is outlined with a configurable color, border width, glow and shadow. Its top border is replaced by a filled bar of the same color showing the window title. The bar's height matches the window's own title bar (automatic), or is a fixed height, or is the title's height plus a fixed padding. The title font family, size, boldness, color, glow and shadow are configurable.
+  - Bring the window to the front: the window is temporarily raised just below the one you are moving, so you can see both. The original stacking order is restored when the target changes or the move ends.
+  - Both.
+- Set the detection distance, or leave it at the default to use KWin's window snap zone.
+
+Colors are written as `#RRGGBB` or `#AARRGGBB`.
+
 #### Require Toolbox Shortcut
 
-When enabled, the zone selector, zone overlay and edge snapping (whichever of them are enabled) only appear while you move a window after toggling the toolbox on with the toggle toolbox shortcut (<kbd>Meta</kbd> + <kbd>Z</kbd> by default). Without the shortcut, a default mode is used instead.
+When enabled, the zone selector, zone overlay, edge snapping and window snapping guides (whichever of them are enabled) only appear while you move a window after toggling the toolbox on with the toggle toolbox shortcut (<kbd>Meta</kbd> + <kbd>Z</kbd> by default). Without the shortcut, a default mode is used instead.
 
 - Enable or disable this behavior.
-- Choose the default mode: no snapping, edge snapping, zone overlay or zone selector.
+- Choose the default mode: no snapping, edge snapping, zone overlay, zone selector or window snapping guides.
 - Choose whether every window move starts in the default mode, or keeps the last used mode (in which case the shortcut can also be pressed before you start moving a window).
 
 #### Remember and restore window geometries

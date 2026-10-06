@@ -74,6 +74,104 @@
             <default>false</default>
         </entry>
 
+        <!-- Window snapping guides -->
+
+        <entry name="enableWindowSnapGuides" type="Bool">
+            <default>false</default>
+        </entry>
+
+        <entry name="windowSnapDistance" type="Int">
+            <default>0</default>
+        </entry>
+
+        <entry name="windowSnapEffect" type="Int">
+            <default>0</default>
+        </entry>
+
+        <entry name="windowSnapColor" type="String">
+            <default>#3daee9</default>
+        </entry>
+
+        <entry name="windowSnapBorderWidth" type="Int">
+            <default>4</default>
+        </entry>
+
+        <entry name="windowSnapGlowEnabled" type="Bool">
+            <default>true</default>
+        </entry>
+
+        <entry name="windowSnapGlowColor" type="String">
+            <default>#3daee9</default>
+        </entry>
+
+        <entry name="windowSnapGlowSize" type="Int">
+            <default>24</default>
+        </entry>
+
+        <entry name="windowSnapShadowEnabled" type="Bool">
+            <default>true</default>
+        </entry>
+
+        <entry name="windowSnapShadowColor" type="String">
+            <default>#b0000000</default>
+        </entry>
+
+        <entry name="windowSnapShadowSize" type="Int">
+            <default>24</default>
+        </entry>
+
+        <entry name="windowSnapTitleHeightMode" type="Int">
+            <default>0</default>
+        </entry>
+
+        <entry name="windowSnapTitleHeight" type="Int">
+            <default>32</default>
+        </entry>
+
+        <entry name="windowSnapTitlePadding" type="Int">
+            <default>6</default>
+        </entry>
+
+        <entry name="windowSnapFontFamily" type="String">
+            <default></default>
+        </entry>
+
+        <entry name="windowSnapFontSize" type="Int">
+            <default>11</default>
+        </entry>
+
+        <entry name="windowSnapFontBold" type="Bool">
+            <default>true</default>
+        </entry>
+
+        <entry name="windowSnapFontColor" type="String">
+            <default>#ffffff</default>
+        </entry>
+
+        <entry name="windowSnapFontGlowEnabled" type="Bool">
+            <default>false</default>
+        </entry>
+
+        <entry name="windowSnapFontGlowColor" type="String">
+            <default>#ffffff</default>
+        </entry>
+
+        <entry name="windowSnapFontGlowSize" type="Int">
+            <default>8</default>
+        </entry>
+
+        <entry name="windowSnapFontShadowEnabled" type="Bool">
+            <default>true</default>
+        </entry>
+
+        <entry name="windowSnapFontShadowColor" type="String">
+            <default>#c0000000</default>
+        </entry>
+
+        <entry name="windowSnapFontShadowSize" type="Int">
+            <default>6</default>
+        </entry>
+
         <!-- Layouts -->
 
         <entry name="layoutsJson" type="String">

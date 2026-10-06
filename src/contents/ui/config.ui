@@ -278,7 +278,7 @@
                     <item>
                       <widget class="QLabel" name="label_toolboxExplanation">
                         <property name="text">
-                          <string>Only show the enabled zone selector, zone overlay and edge snapping while the toolbox is toggled on with the "KZones: Toggle toolbox" shortcut (Meta+Z by default, configurable under System Settings / Shortcuts). Otherwise, the default mode below is used.</string>
+                          <string>Only show the enabled zone selector, zone overlay, edge snapping and window snapping guides while the toolbox is toggled on with the "KZones: Toggle toolbox" shortcut (Meta+Z by default, configurable under System Settings / Shortcuts). Otherwise, the default mode below is used.</string>
                         </property>
                         <property name="wordWrap">
                           <bool>true</bool>
@@ -320,6 +320,11 @@
                             <item>
                               <property name="text">
                                 <string>Zone selector</string>
+                              </property>
+                            </item>
+                            <item>
+                              <property name="text">
+                                <string>Window snapping guides</string>
                               </property>
                             </item>
                           </widget>
@@ -438,6 +443,449 @@
             <zorder>groupBox_snappingBehaviour</zorder>
             <zorder>kcfg_enableZoneSelector</zorder>
             <zorder>kcfg_enableZoneOverlay</zorder>
+          </widget>
+          <widget class="QWidget" name="tab_snappingGuides">
+            <attribute name="icon">
+              <iconset theme="transform-move"/>
+            </attribute>
+            <attribute name="title">
+              <string>Snapping Guides</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_snappingGuides">
+          <item>
+          <widget class="QGroupBox" name="kcfg_enableWindowSnapGuides">
+            <property name="title">
+              <string>Enable Window Snapping Guides</string>
+            </property>
+            <property name="checkable">
+              <bool>true</bool>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_enableWindowSnapGuides">
+          <item>
+          <widget class="QLabel" name="label_windowSnapExplanation">
+            <property name="text">
+              <string>While you move a window, KWin's own window snapping pulls it against the edges of nearby windows (System Settings / Window Management / Window Behavior / Movement / Window snap zone). The guides show which window it is snapping to.</string>
+            </property>
+            <property name="wordWrap">
+              <bool>true</bool>
+            </property>
+          </widget>
+          </item>
+          <item>
+          <layout class="QFormLayout" name="formLayout_windowSnap">
+          <item row="0" column="0">
+          <widget class="QLabel" name="label_windowSnapEffect">
+            <property name="text">
+              <string>Effect</string>
+            </property>
+          </widget>
+          </item>
+          <item row="0" column="1">
+          <widget class="QComboBox" name="kcfg_windowSnapEffect">
+            <item>
+              <property name="text">
+                <string>Highlight the window</string>
+              </property>
+            </item>
+            <item>
+              <property name="text">
+                <string>Bring the window to the front</string>
+              </property>
+            </item>
+            <item>
+              <property name="text">
+                <string>Both</string>
+              </property>
+            </item>
+          </widget>
+          </item>
+          <item row="1" column="0">
+          <widget class="QLabel" name="label_windowSnapDistance">
+            <property name="text">
+              <string>Detection distance</string>
+            </property>
+          </widget>
+          </item>
+          <item row="1" column="1">
+          <widget class="QSpinBox" name="kcfg_windowSnapDistance">
+            <property name="suffix">
+              <string> px</string>
+            </property>
+            <property name="minimum">
+              <number>0</number>
+            </property>
+            <property name="maximum">
+              <number>200</number>
+            </property>
+            <property name="specialValueText">
+              <string>KWin's window snap zone</string>
+            </property>
+          </widget>
+          </item>
+          </layout>
+          </item>
+            </layout>
+          </widget>
+          </item>
+          <item>
+          <widget class="QGroupBox" name="windowSnapHighlight">
+            <property name="title">
+              <string>Highlight</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_windowSnapHighlight">
+          <item>
+          <layout class="QFormLayout" name="formLayout_windowSnapHighlight">
+          <item row="0" column="0">
+          <widget class="QLabel" name="label_windowSnapColor">
+            <property name="text">
+              <string>Color</string>
+            </property>
+          </widget>
+          </item>
+          <item row="0" column="1">
+          <widget class="QLineEdit" name="kcfg_windowSnapColor">
+            <property name="placeholderText">
+              <string>#RRGGBB or #AARRGGBB</string>
+            </property>
+          </widget>
+          </item>
+          <item row="1" column="0">
+          <widget class="QLabel" name="label_windowSnapBorderWidth">
+            <property name="text">
+              <string>Border width</string>
+            </property>
+          </widget>
+          </item>
+          <item row="1" column="1">
+          <widget class="QSpinBox" name="kcfg_windowSnapBorderWidth">
+            <property name="suffix">
+              <string> px</string>
+            </property>
+            <property name="minimum">
+              <number>0</number>
+            </property>
+            <property name="maximum">
+              <number>50</number>
+            </property>
+          </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+          <widget class="QCheckBox" name="kcfg_windowSnapGlowEnabled">
+            <property name="text">
+              <string>Glow</string>
+            </property>
+          </widget>
+          </item>
+          <item row="3" column="0">
+          <widget class="QLabel" name="label_windowSnapGlowColor">
+            <property name="text">
+              <string>Glow color</string>
+            </property>
+          </widget>
+          </item>
+          <item row="3" column="1">
+          <widget class="QLineEdit" name="kcfg_windowSnapGlowColor">
+            <property name="placeholderText">
+              <string>#RRGGBB or #AARRGGBB</string>
+            </property>
+          </widget>
+          </item>
+          <item row="4" column="0">
+          <widget class="QLabel" name="label_windowSnapGlowSize">
+            <property name="text">
+              <string>Glow size</string>
+            </property>
+          </widget>
+          </item>
+          <item row="4" column="1">
+          <widget class="QSpinBox" name="kcfg_windowSnapGlowSize">
+            <property name="suffix">
+              <string> px</string>
+            </property>
+            <property name="minimum">
+              <number>1</number>
+            </property>
+            <property name="maximum">
+              <number>64</number>
+            </property>
+          </widget>
+          </item>
+          <item row="5" column="0" colspan="2">
+          <widget class="QCheckBox" name="kcfg_windowSnapShadowEnabled">
+            <property name="text">
+              <string>Shadow</string>
+            </property>
+          </widget>
+          </item>
+          <item row="6" column="0">
+          <widget class="QLabel" name="label_windowSnapShadowColor">
+            <property name="text">
+              <string>Shadow color</string>
+            </property>
+          </widget>
+          </item>
+          <item row="6" column="1">
+          <widget class="QLineEdit" name="kcfg_windowSnapShadowColor">
+            <property name="placeholderText">
+              <string>#RRGGBB or #AARRGGBB</string>
+            </property>
+          </widget>
+          </item>
+          <item row="7" column="0">
+          <widget class="QLabel" name="label_windowSnapShadowSize">
+            <property name="text">
+              <string>Shadow size</string>
+            </property>
+          </widget>
+          </item>
+          <item row="7" column="1">
+          <widget class="QSpinBox" name="kcfg_windowSnapShadowSize">
+            <property name="suffix">
+              <string> px</string>
+            </property>
+            <property name="minimum">
+              <number>1</number>
+            </property>
+            <property name="maximum">
+              <number>64</number>
+            </property>
+          </widget>
+          </item>
+          <item row="8" column="0">
+          <widget class="QLabel" name="label_windowSnapTitleHeightMode">
+            <property name="text">
+              <string>Title bar height</string>
+            </property>
+          </widget>
+          </item>
+          <item row="8" column="1">
+          <widget class="QComboBox" name="kcfg_windowSnapTitleHeightMode">
+            <item>
+              <property name="text">
+                <string>Automatic (match the window's title bar)</string>
+              </property>
+            </item>
+            <item>
+              <property name="text">
+                <string>Fixed height</string>
+              </property>
+            </item>
+            <item>
+              <property name="text">
+                <string>Fixed padding around the title</string>
+              </property>
+            </item>
+          </widget>
+          </item>
+          <item row="9" column="0">
+          <widget class="QLabel" name="label_windowSnapTitleHeight">
+            <property name="text">
+              <string>Fixed height</string>
+            </property>
+          </widget>
+          </item>
+          <item row="9" column="1">
+          <widget class="QSpinBox" name="kcfg_windowSnapTitleHeight">
+            <property name="suffix">
+              <string> px</string>
+            </property>
+            <property name="minimum">
+              <number>1</number>
+            </property>
+            <property name="maximum">
+              <number>200</number>
+            </property>
+          </widget>
+          </item>
+          <item row="10" column="0">
+          <widget class="QLabel" name="label_windowSnapTitlePadding">
+            <property name="text">
+              <string>Padding</string>
+            </property>
+          </widget>
+          </item>
+          <item row="10" column="1">
+          <widget class="QSpinBox" name="kcfg_windowSnapTitlePadding">
+            <property name="suffix">
+              <string> px</string>
+            </property>
+            <property name="minimum">
+              <number>0</number>
+            </property>
+            <property name="maximum">
+              <number>100</number>
+            </property>
+          </widget>
+          </item>
+          </layout>
+          </item>
+            </layout>
+          </widget>
+          </item>
+          <item>
+          <widget class="QGroupBox" name="windowSnapFont">
+            <property name="title">
+              <string>Title Font</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_windowSnapFont">
+          <item>
+          <layout class="QFormLayout" name="formLayout_windowSnapFont">
+          <item row="0" column="0">
+          <widget class="QLabel" name="label_windowSnapFontFamily">
+            <property name="text">
+              <string>Family</string>
+            </property>
+          </widget>
+          </item>
+          <item row="0" column="1">
+          <widget class="QLineEdit" name="kcfg_windowSnapFontFamily">
+            <property name="placeholderText">
+              <string>System default</string>
+            </property>
+          </widget>
+          </item>
+          <item row="1" column="0">
+          <widget class="QLabel" name="label_windowSnapFontSize">
+            <property name="text">
+              <string>Size</string>
+            </property>
+          </widget>
+          </item>
+          <item row="1" column="1">
+          <widget class="QSpinBox" name="kcfg_windowSnapFontSize">
+            <property name="suffix">
+              <string> pt</string>
+            </property>
+            <property name="minimum">
+              <number>1</number>
+            </property>
+            <property name="maximum">
+              <number>96</number>
+            </property>
+          </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+          <widget class="QCheckBox" name="kcfg_windowSnapFontBold">
+            <property name="text">
+              <string>Bold</string>
+            </property>
+          </widget>
+          </item>
+          <item row="3" column="0">
+          <widget class="QLabel" name="label_windowSnapFontColor">
+            <property name="text">
+              <string>Color</string>
+            </property>
+          </widget>
+          </item>
+          <item row="3" column="1">
+          <widget class="QLineEdit" name="kcfg_windowSnapFontColor">
+            <property name="placeholderText">
+              <string>#RRGGBB or #AARRGGBB</string>
+            </property>
+          </widget>
+          </item>
+          <item row="4" column="0" colspan="2">
+          <widget class="QCheckBox" name="kcfg_windowSnapFontGlowEnabled">
+            <property name="text">
+              <string>Glow</string>
+            </property>
+          </widget>
+          </item>
+          <item row="5" column="0">
+          <widget class="QLabel" name="label_windowSnapFontGlowColor">
+            <property name="text">
+              <string>Glow color</string>
+            </property>
+          </widget>
+          </item>
+          <item row="5" column="1">
+          <widget class="QLineEdit" name="kcfg_windowSnapFontGlowColor">
+            <property name="placeholderText">
+              <string>#RRGGBB or #AARRGGBB</string>
+            </property>
+          </widget>
+          </item>
+          <item row="6" column="0">
+          <widget class="QLabel" name="label_windowSnapFontGlowSize">
+            <property name="text">
+              <string>Glow size</string>
+            </property>
+          </widget>
+          </item>
+          <item row="6" column="1">
+          <widget class="QSpinBox" name="kcfg_windowSnapFontGlowSize">
+            <property name="suffix">
+              <string> px</string>
+            </property>
+            <property name="minimum">
+              <number>1</number>
+            </property>
+            <property name="maximum">
+              <number>64</number>
+            </property>
+          </widget>
+          </item>
+          <item row="7" column="0" colspan="2">
+          <widget class="QCheckBox" name="kcfg_windowSnapFontShadowEnabled">
+            <property name="text">
+              <string>Shadow</string>
+            </property>
+          </widget>
+          </item>
+          <item row="8" column="0">
+          <widget class="QLabel" name="label_windowSnapFontShadowColor">
+            <property name="text">
+              <string>Shadow color</string>
+            </property>
+          </widget>
+          </item>
+          <item row="8" column="1">
+          <widget class="QLineEdit" name="kcfg_windowSnapFontShadowColor">
+            <property name="placeholderText">
+              <string>#RRGGBB or #AARRGGBB</string>
+            </property>
+          </widget>
+          </item>
+          <item row="9" column="0">
+          <widget class="QLabel" name="label_windowSnapFontShadowSize">
+            <property name="text">
+              <string>Shadow size</string>
+            </property>
+          </widget>
+          </item>
+          <item row="9" column="1">
+          <widget class="QSpinBox" name="kcfg_windowSnapFontShadowSize">
+            <property name="suffix">
+              <string> px</string>
+            </property>
+            <property name="minimum">
+              <number>1</number>
+            </property>
+            <property name="maximum">
+              <number>64</number>
+            </property>
+          </widget>
+          </item>
+          </layout>
+          </item>
+            </layout>
+          </widget>
+          </item>
+          <item>
+            <spacer name="verticalSpacer_snappingGuides">
+              <property name="orientation">
+                <enum>Qt::Orientation::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+                <size>
+                  <width>0</width>
+                  <height>0</height>
+                </size>
+              </property>
+            </spacer>
+          </item>
+            </layout>
           </widget>
           <widget class="QWidget" name="tab_layouts">
             <attribute name="icon">

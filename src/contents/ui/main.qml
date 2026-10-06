@@ -22,12 +22,19 @@ Item {
     property int highlightedZone: -1
     property var activeScreen: null
     property bool showZoneOverlay: config.zoneOverlayShowWhen == 0
-    // when the toolbox shortcut is required, the enabled features only show while the toolbox is toggled on,
-    // otherwise the configured default drag mode is used (0: no snapping, 1: edge snapping, 2: zone overlay, 3: zone selector)
+    // when the toolbox shortcut is required, the enabled features only show while the toolbox is toggled on, otherwise the
+    // configured default drag mode is used (0: no snapping, 1: edge snapping, 2: zone overlay, 3: zone selector, 4: window snapping guides)
     property bool toolboxActive: false
     property bool zoneSelectorActive: config.requireToolboxShortcut ? (toolboxActive ? config.enableZoneSelector : config.defaultDragMode == 3) : config.enableZoneSelector
     property bool zoneOverlayActive: config.requireToolboxShortcut ? (toolboxActive ? config.enableZoneOverlay : config.defaultDragMode == 2) : config.enableZoneOverlay
     property bool edgeSnappingActive: config.requireToolboxShortcut ? (toolboxActive ? config.enableEdgeSnapping : config.defaultDragMode == 1) : config.enableEdgeSnapping
+    property bool windowSnapGuidesActive: config.requireToolboxShortcut ? (toolboxActive ? config.enableWindowSnapGuides : config.defaultDragMode == 4) : config.enableWindowSnapGuides
+    // window snapping guides: the window being moved, the window it snaps to and its geometry mapped into the overlay
+    property var movingClient: null
+    property var snapTarget: null
+    property var snapTargetRect: Qt.rect(0, 0, 0, 0)
+    property var raisedSnapTarget: null
+    property var stackingSnapshot: []
 
     function refreshClientArea() {
         activeScreen = Workspace.activeScreen;
@@ -359,6 +366,88 @@ Item {
         return name;
     }
 
+    function isSnapCandidate(window, client) {
+        if (!window || window === client || !window.normalWindow || window.minimized)
+            return false;
+
+        if (!window.onAllDesktops && !Array.from(window.desktops).includes(Workspace.currentDesktop))
+            return false;
+
+        return window.activities.length == 0 || window.activities.includes(Workspace.currentActivity);
+    }
+
+    // window whose edges the moving client is snapping to (within KWin's window snap zone unless configured otherwise)
+    function findSnapTarget(client) {
+        const snapDistance = config.windowSnapDistance > 0 ? config.windowSnapDistance : (Options.windowSnapZone || 10);
+        const g = client.frameGeometry;
+        let target = null;
+        let minDistance = Infinity;
+        // walk from the top so the topmost window wins ties
+        for (let i = Workspace.stackingOrder.length - 1; i >= 0; i--) {
+            const window = Workspace.stackingOrder[i];
+            if (!isSnapCandidate(window, client))
+                continue;
+
+            const o = window.frameGeometry;
+            const overlapsX = g.x < o.x + o.width + snapDistance && g.x + g.width > o.x - snapDistance;
+            const overlapsY = g.y < o.y + o.height + snapDistance && g.y + g.height > o.y - snapDistance;
+            let distance = Infinity;
+            if (overlapsY)
+                distance = Math.min(distance, Math.abs(g.x - (o.x + o.width)), Math.abs(g.x + g.width - o.x), Math.abs(g.x - o.x), Math.abs(g.x + g.width - (o.x + o.width)));
+
+            if (overlapsX)
+                distance = Math.min(distance, Math.abs(g.y - (o.y + o.height)), Math.abs(g.y + g.height - o.y), Math.abs(g.y - o.y), Math.abs(g.y + g.height - (o.y + o.height)));
+
+            if (distance <= snapDistance && distance < minDistance) {
+                minDistance = distance;
+                target = window;
+            }
+        }
+        return target;
+    }
+
+    // put the windows that were above the raised snap target back above it, in their original order
+    function restoreSnapTargetStacking() {
+        if (!raisedSnapTarget)
+            return ;
+
+        const index = stackingSnapshot.indexOf(raisedSnapTarget);
+        for (let i = index + 1; index != -1 && i < stackingSnapshot.length; i++) {
+            if (Workspace.stackingOrder.includes(stackingSnapshot[i]))
+                Workspace.raiseWindow(stackingSnapshot[i]);
+
+        }
+        if (movingClient && Workspace.stackingOrder.includes(movingClient))
+            Workspace.raiseWindow(movingClient);
+
+        raisedSnapTarget = null;
+    }
+
+    function setSnapTarget(target) {
+        if (target) {
+            const p = mainItem.mapFromGlobal(Qt.point(target.frameGeometry.x, target.frameGeometry.y));
+            snapTargetRect = Qt.rect(p.x, p.y, target.frameGeometry.width, target.frameGeometry.height);
+        }
+        if (target === snapTarget)
+            return ;
+
+        Utils.log("Snap target " + (target ? target.resourceClass.toString() : "none"));
+        restoreSnapTargetStacking();
+        snapTarget = target;
+        // bring the snap target to the front, just below the moving window
+        if (target && config.windowSnapEffect != 0) {
+            if (typeof Workspace.raiseWindow !== "function") {
+                Utils.log("Workspace.raiseWindow is not available, cannot bring the snap target to the front", "warning");
+                return ;
+            }
+            Workspace.raiseWindow(target);
+            if (movingClient)
+                Workspace.raiseWindow(movingClient);
+
+            raisedSnapTarget = target;
+        }
+    }
+
     function checkFilter(client) {
         // filter out abnormal windows like docks, panels, etc...
         if (!client)
@@ -414,6 +503,9 @@ Item {
                     }
                     if (config.toolboxModeOnMoveStart == 0)
                         toolboxActive = false;
+
+                    movingClient = client;
+                    stackingSnapshot = Array.from(Workspace.stackingOrder);
 
                     moving = true;
                     moved = false;
@@ -528,6 +620,9 @@ Item {
             zoneSelector.near = false;
             highlightedZone = -1;
             showZoneOverlay = config.zoneOverlayShowWhen == 0;
+            setSnapTarget(null);
+            movingClient = null;
+            stackingSnapshot = [];
         }
 
         title: "KZones Overlay"
@@ -630,12 +725,32 @@ Item {
                             });
                         }
                     }
+                    // window snapping guides
+                    if (windowSnapGuidesActive && movingClient)
+                        setSnapTarget(findSnapTarget(movingClient));
+                    else
+                        setSnapTarget(null);
                     // if hovering zone changed from the last frame
                     if (hoveringZone != highlightedZone) {
                         Utils.log("Highlighting zone " + hoveringZone + " in layout " + currentLayout);
                         highlightedZone = hoveringZone;
                     }
                 }
+            }
+
+            Loader {
+                active: snapTarget !== null && config.windowSnapEffect != 1
+                x: snapTargetRect.x
+                y: snapTargetRect.y
+                width: snapTargetRect.width
+                height: snapTargetRect.height
+
+                sourceComponent: Components.SnapHighlight {
+                    config: root.config
+                    title: snapTarget ? snapTarget.caption : ""
+                    decorationHeight: snapTarget && snapTarget.clientGeometry ? snapTarget.clientGeometry.y - snapTarget.frameGeometry.y : 0
+                }
+
             }
 
             Item {
