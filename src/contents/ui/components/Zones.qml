@@ -44,7 +44,7 @@ Item {
                 border.width: 1
                 opacity: !showZoneOverlay ? 0 : (zoneSelector.expanded) ? 0 : (active ? 0.6 : 1)
                 scale: active ? 1.1 : 1
-                visible: config.enableZoneOverlay
+                visible: zoneOverlayActive
                 // position
                 anchors.left: (indicatorPos === "top-left" || indicatorPos === "left-center" || indicatorPos === "bottom-left") ? parent.left : undefined
                 anchors.right: (indicatorPos === "top-right" || indicatorPos === "right-center" || indicatorPos === "bottom-right") ? parent.right : undefined

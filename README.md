@@ -97,6 +97,14 @@ Edge Snapping allows you to snap windows to zones by dragging them to the edge o
 - Enable or disable edge snapping.
 - Set the distance from the edge of the screen at which the edge snapping will start to appear.
 
+#### Require Toolbox Shortcut
+
+When enabled, the zone selector, zone overlay and edge snapping (whichever of them are enabled) only appear while you move a window after toggling the toolbox on with the toggle toolbox shortcut (<kbd>Meta</kbd> + <kbd>Z</kbd> by default). Without the shortcut, a default mode is used instead.
+
+- Enable or disable this behavior.
+- Choose the default mode: no snapping, edge snapping, zone overlay or zone selector.
+- Choose whether every window move starts in the default mode, or keeps the last used mode (in which case the shortcut can also be pressed before you start moving a window).
+
 #### Remember and restore window geometries
 
 The script will remember the geometry of each window when it's moved to a zone. When the window is moved out of the zone, it will be restored to it's original geometry.
@@ -320,6 +328,7 @@ List of all available shortcuts:
 | Cycle layouts                             | <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>D</kbd>                    |
 | Cycle layouts (reversed)                  | <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>D</kbd> |
 | Toggle zone overlay                       | <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>C</kbd>                    |
+| Toggle toolbox                            | <kbd>Meta</kbd> + <kbd>Z</kbd>                                     |
 | Activate layout                           | <kbd>Meta</kbd> + <kbd>Num 0-9</kbd>                               |
 | Move active window up                     | <kbd>Meta</kbd> + <kbd>Up</kbd>                                    |
 | Move active window down                   | <kbd>Meta</kbd> + <kbd>Down</kbd>                                  |

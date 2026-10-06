@@ -58,6 +58,9 @@ export function loadConfig() {
   config.zoneOverlayIndicatorDisplay = KWin.readConfig("zoneOverlayIndicatorDisplay", 0);
   config.enableEdgeSnapping = KWin.readConfig("enableEdgeSnapping", false);
   config.edgeSnappingTriggerDistance = KWin.readConfig("edgeSnappingTriggerDistance", 1);
+  config.requireToolboxShortcut = KWin.readConfig("requireToolboxShortcut", false);
+  config.defaultDragMode = KWin.readConfig("defaultDragMode", 0);
+  config.toolboxModeOnMoveStart = KWin.readConfig("toolboxModeOnMoveStart", 0);
   config.rememberWindowGeometries = KWin.readConfig("rememberWindowGeometries", true);
   config.trackLayoutPerScreen = KWin.readConfig("trackLayoutPerScreen", false);
   config.trackLayoutPerDesktop = KWin.readConfig("trackLayoutPerDesktop", false);

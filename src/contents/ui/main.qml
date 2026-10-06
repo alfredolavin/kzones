@@ -22,6 +22,12 @@ Item {
     property int highlightedZone: -1
     property var activeScreen: null
     property bool showZoneOverlay: config.zoneOverlayShowWhen == 0
+    // when the toolbox shortcut is required, the enabled features only show while the toolbox is toggled on,
+    // otherwise the configured default drag mode is used (0: no snapping, 1: edge snapping, 2: zone overlay, 3: zone selector)
+    property bool toolboxActive: false
+    property bool zoneSelectorActive: config.requireToolboxShortcut ? (toolboxActive ? config.enableZoneSelector : config.defaultDragMode == 3) : config.enableZoneSelector
+    property bool zoneOverlayActive: config.requireToolboxShortcut ? (toolboxActive ? config.enableZoneOverlay : config.defaultDragMode == 2) : config.enableZoneOverlay
+    property bool edgeSnappingActive: config.requireToolboxShortcut ? (toolboxActive ? config.enableEdgeSnapping : config.defaultDragMode == 1) : config.enableEdgeSnapping
 
     function refreshClientArea() {
         activeScreen = Workspace.activeScreen;
@@ -406,6 +412,9 @@ Item {
                             client.frameGeometry = newGeometry;
                         }
                     }
+                    if (config.toolboxModeOnMoveStart == 0)
+                        toolboxActive = false;
+
                     moving = true;
                     moved = false;
                     resizing = false;
@@ -554,7 +563,7 @@ Item {
                     let hoveringZone = -1;
                     // zone overlay
                     const currentZones = repeaterLayout.itemAt(currentLayout);
-                    if (config.enableZoneOverlay && showZoneOverlay && !zoneSelector.expanded)
+                    if (zoneOverlayActive && showZoneOverlay && !zoneSelector.expanded)
                         currentZones.repeater.model.forEach((zone, zoneIndex) => {
                         if (Utils.isHovering(currentZones.repeater.itemAt(zoneIndex).children[config.zoneOverlayHighlightTarget]))
                             hoveringZone = zoneIndex;
@@ -562,7 +571,7 @@ Item {
                     });
 
                     // zone selector
-                    if (config.enableZoneSelector) {
+                    if (zoneSelectorActive) {
                         if (!zoneSelector.animating && zoneSelector.expanded) {
                             zoneSelector.repeater.model.forEach((layout, layoutIndex) => {
                                 const layoutItem = zoneSelector.repeater.itemAt(layoutIndex);
@@ -582,7 +591,7 @@ Item {
                         zoneSelector.near = (Workspace.cursorPos.y - clientArea.y) < zoneSelector.y + zoneSelector.height + triggerDistance;
                     }
                     // edge snapping
-                    if (config.enableEdgeSnapping) {
+                    if (edgeSnappingActive) {
                         const triggerDistance = (config.edgeSnappingTriggerDistance + 1) * 10;
                         if (Workspace.cursorPos.x <= clientArea.x + triggerDistance || Workspace.cursorPos.x >= clientArea.x + clientArea.width - triggerDistance || Workspace.cursorPos.y <= clientArea.y + triggerDistance || Workspace.cursorPos.y >= clientArea.y + clientArea.height - triggerDistance) {
                             const padding = config.layouts[currentLayout].padding || 0;
@@ -725,6 +734,25 @@ Item {
                 showZoneOverlay = !showZoneOverlay;
             else
                 Utils.osd("The overlay can only be shown while moving a window");
+        }
+        onToggleToolbox: {
+            if (!config.requireToolboxShortcut) {
+                Utils.osd("The toolbox shortcut is disabled");
+                return ;
+            }
+            if (!moving && config.toolboxModeOnMoveStart == 0) {
+                Utils.osd("The toolbox can only be toggled while moving a window");
+                return ;
+            }
+            toolboxActive = !toolboxActive;
+            if (!zoneSelectorActive) {
+                zoneSelector.expanded = false;
+                zoneSelector.near = false;
+            }
+            highlightedZone = -1;
+            if (!moving)
+                Utils.osd(toolboxActive ? "Toolbox will be shown on next move" : "Toolbox will be hidden on next move");
+
         }
         onSwitchToNextWindowInCurrentZone: {
             switchWindowInZone(Workspace.activeWindow.zone, Workspace.activeWindow.layout);

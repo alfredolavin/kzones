@@ -264,6 +264,99 @@
                 </widget>
               </item>
               <item>
+                <widget class="QGroupBox" name="kcfg_requireToolboxShortcut">
+                  <property name="title">
+                    <string>Require Toolbox Shortcut</string>
+                  </property>
+                  <property name="checkable">
+                    <bool>true</bool>
+                  </property>
+                  <property name="checked">
+                    <bool>false</bool>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_toolbox">
+                    <item>
+                      <widget class="QLabel" name="label_toolboxExplanation">
+                        <property name="text">
+                          <string>Only show the enabled zone selector, zone overlay and edge snapping while the toolbox is toggled on with the "KZones: Toggle toolbox" shortcut (Meta+Z by default, configurable under System Settings / Shortcuts). Otherwise, the default mode below is used.</string>
+                        </property>
+                        <property name="wordWrap">
+                          <bool>true</bool>
+                        </property>
+                      </widget>
+                    </item>
+                    <item>
+                      <layout class="QFormLayout" name="formLayout_toolbox">
+                        <item row="0" column="0">
+                          <widget class="QLabel" name="label_defaultDragMode">
+                            <property name="text">
+                              <string>Default mode</string>
+                            </property>
+                          </widget>
+                        </item>
+                        <item row="0" column="1">
+                          <widget class="QComboBox" name="kcfg_defaultDragMode">
+                            <property name="sizePolicy">
+                              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                              </sizepolicy>
+                            </property>
+                            <item>
+                              <property name="text">
+                                <string>No snapping</string>
+                              </property>
+                            </item>
+                            <item>
+                              <property name="text">
+                                <string>Edge snapping</string>
+                              </property>
+                            </item>
+                            <item>
+                              <property name="text">
+                                <string>Zone overlay</string>
+                              </property>
+                            </item>
+                            <item>
+                              <property name="text">
+                                <string>Zone selector</string>
+                              </property>
+                            </item>
+                          </widget>
+                        </item>
+                        <item row="1" column="0">
+                          <widget class="QLabel" name="label_toolboxModeOnMoveStart">
+                            <property name="text">
+                              <string>When moving a window</string>
+                            </property>
+                          </widget>
+                        </item>
+                        <item row="1" column="1">
+                          <widget class="QComboBox" name="kcfg_toolboxModeOnMoveStart">
+                            <property name="sizePolicy">
+                              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                              </sizepolicy>
+                            </property>
+                            <item>
+                              <property name="text">
+                                <string>Always start in the default mode</string>
+                              </property>
+                            </item>
+                            <item>
+                              <property name="text">
+                                <string>Keep the last used mode</string>
+                              </property>
+                            </item>
+                          </widget>
+                        </item>
+                      </layout>
+                    </item>
+                  </layout>
+                </widget>
+              </item>
+              <item>
                 <widget class="QGroupBox" name="groupBox_snappingBehaviour">
                   <property name="title">
                     <string>Behaviour</string>
