@@ -80,6 +80,18 @@
             <default>false</default>
         </entry>
 
+        <entry name="windowSnapActivation" type="Int">
+            <default>1</default>
+        </entry>
+
+        <entry name="windowSnapActivationCorner" type="Int">
+            <default>0</default>
+        </entry>
+
+        <entry name="windowSnapCornerSize" type="Int">
+            <default>20</default>
+        </entry>
+
         <entry name="windowSnapDistance" type="Int">
             <default>0</default>
         </entry>

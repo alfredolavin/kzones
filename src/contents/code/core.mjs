@@ -68,6 +68,9 @@ export function loadConfig() {
   config.fadeWindowsWhileMoving = KWin.readConfig("fadeWindowsWhileMoving", false);
   config.autoSnapAllNew = KWin.readConfig("autoSnapAllNew", false);
   config.enableWindowSnapGuides = KWin.readConfig("enableWindowSnapGuides", false);
+  config.windowSnapActivation = KWin.readConfig("windowSnapActivation", 1);
+  config.windowSnapActivationCorner = KWin.readConfig("windowSnapActivationCorner", 0);
+  config.windowSnapCornerSize = KWin.readConfig("windowSnapCornerSize", 20);
   config.windowSnapDistance = KWin.readConfig("windowSnapDistance", 0);
   config.windowSnapEffect = KWin.readConfig("windowSnapEffect", 0);
   config.windowSnapColor = KWin.readConfig("windowSnapColor", "#3daee9");

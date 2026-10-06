@@ -25,10 +25,13 @@ Item {
     // when the toolbox shortcut is required, the enabled features only show while the toolbox is toggled on, otherwise the
     // configured default drag mode is used (0: no snapping, 1: edge snapping, 2: zone overlay, 3: zone selector, 4: window snapping guides)
     property bool toolboxActive: false
-    property bool zoneSelectorActive: config.requireToolboxShortcut ? (toolboxActive ? config.enableZoneSelector : config.defaultDragMode == 3) : config.enableZoneSelector
-    property bool zoneOverlayActive: config.requireToolboxShortcut ? (toolboxActive ? config.enableZoneOverlay : config.defaultDragMode == 2) : config.enableZoneOverlay
-    property bool edgeSnappingActive: config.requireToolboxShortcut ? (toolboxActive ? config.enableEdgeSnapping : config.defaultDragMode == 1) : config.enableEdgeSnapping
-    property bool windowSnapGuidesActive: config.requireToolboxShortcut ? (toolboxActive ? config.enableWindowSnapGuides : config.defaultDragMode == 4) : config.enableWindowSnapGuides
+    // once the guides are switched on by reaching the activation corner, they take over the rest of the move
+    property bool windowSnapGuidesEnabled: config.requireToolboxShortcut ? (toolboxActive ? config.enableWindowSnapGuides : config.defaultDragMode == 4) : config.enableWindowSnapGuides
+    property bool windowSnapCornerReached: false
+    property bool windowSnapGuidesActive: windowSnapGuidesEnabled && (config.windowSnapActivation == 0 || windowSnapCornerReached)
+    property bool zoneSelectorActive: !windowSnapCornerReached && (config.requireToolboxShortcut ? (toolboxActive ? config.enableZoneSelector : config.defaultDragMode == 3) : config.enableZoneSelector)
+    property bool zoneOverlayActive: !windowSnapCornerReached && (config.requireToolboxShortcut ? (toolboxActive ? config.enableZoneOverlay : config.defaultDragMode == 2) : config.enableZoneOverlay)
+    property bool edgeSnappingActive: !windowSnapCornerReached && (config.requireToolboxShortcut ? (toolboxActive ? config.enableEdgeSnapping : config.defaultDragMode == 1) : config.enableEdgeSnapping)
     // window snapping guides: the window being moved, the window it snaps to and its geometry mapped into the overlay
     property var movingClient: null
     property var snapTarget: null
@@ -366,6 +369,17 @@ Item {
         return name;
     }
 
+    // whether the cursor is in the configured activation corner (0: top left, 1: bottom left, 2: top right, 3: bottom right)
+    function isCursorInWindowSnapCorner() {
+        const size = config.windowSnapCornerSize;
+        const corner = config.windowSnapActivationCorner;
+        const left = Workspace.cursorPos.x <= clientArea.x + size;
+        const right = Workspace.cursorPos.x >= clientArea.x + clientArea.width - size;
+        const top = Workspace.cursorPos.y <= clientArea.y + size;
+        const bottom = Workspace.cursorPos.y >= clientArea.y + clientArea.height - size;
+        return (corner == 0 && left && top) || (corner == 1 && left && bottom) || (corner == 2 && right && top) || (corner == 3 && right && bottom);
+    }
+
     function isSnapCandidate(window, client) {
         if (!window || window === client || !window.normalWindow || window.minimized)
             return false;
@@ -505,6 +519,7 @@ Item {
                         toolboxActive = false;
 
                     movingClient = client;
+                    windowSnapCornerReached = false;
                     stackingSnapshot = Array.from(Workspace.stackingOrder);
 
                     moving = true;
@@ -622,6 +637,7 @@ Item {
             showZoneOverlay = config.zoneOverlayShowWhen == 0;
             setSnapTarget(null);
             movingClient = null;
+            windowSnapCornerReached = false;
             stackingSnapshot = [];
         }
 
@@ -656,6 +672,14 @@ Item {
                 onTriggered: {
                     refreshClientArea();
                     let hoveringZone = -1;
+                    // switch the move to the window snapping guides when the activation corner is reached
+                    if (windowSnapGuidesEnabled && config.windowSnapActivation == 1 && !windowSnapCornerReached && isCursorInWindowSnapCorner()) {
+                        Utils.log("Window snapping guides activated");
+                        windowSnapCornerReached = true;
+                        zoneSelector.expanded = false;
+                        zoneSelector.near = false;
+                        Utils.osd("Window snapping guides");
+                    }
                     // zone overlay
                     const currentZones = repeaterLayout.itemAt(currentLayout);
                     if (zoneOverlayActive && showZoneOverlay && !zoneSelector.expanded)

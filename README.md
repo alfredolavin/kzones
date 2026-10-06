@@ -102,6 +102,8 @@ Edge Snapping allows you to snap windows to zones by dragging them to the edge o
 KWin can magnetically snap a window you move against the edges of other windows (`System Settings / Window Management / Window Behavior / Movement / Window snap zone`). With the snapping guides enabled, KZones shows which window it is snapping to. The settings are in the "Snapping Guides" tab.
 
 - Enable or disable the guides.
+- Choose when they activate: as soon as you start moving a window, or when the cursor reaches a screen corner (top left by default) while moving. Reaching the corner switches the rest of that move to the guides and hides the zone selector, zone overlay and edge snapping.
+- Choose the activation corner and how close to it the cursor must get.
 - Choose the effect:
   - Highlight the window: the window is outlined with a configurable color, border width, glow and shadow. Its top border is replaced by a filled bar of the same color showing the window title. The bar's height matches the window's own title bar (automatic), or is a fixed height, or is the title's height plus a fixed padding. The title font family, size, boldness, color, glow and shadow are configurable.
   - Bring the window to the front: the window is temporarily raised just below the one you are moving, so you can see both. The original stacking order is restored when the target changes or the move ends.
