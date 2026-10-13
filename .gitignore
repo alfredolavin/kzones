@@ -1,2 +1,3 @@
 contents/ui/config_ui.py
-KZones.kwinscript
+KZones.kwinscript__pycache__/
+*.pyc
