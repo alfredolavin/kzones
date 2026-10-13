@@ -3,6 +3,7 @@ import QtQuick.Effects
 
 MultiEffect {
     property Item target: null
+    property var config
 
     anchors.fill: target
     visible: target ? target.visible : false
@@ -13,7 +14,7 @@ MultiEffect {
     shadowHorizontalOffset: 0
     shadowVerticalOffset: 0
     shadowBlur: 1
-    shadowColor: colorHelper.getShadowColor()
+    shadowColor: colorHelper.pick(config, "shadow", colorHelper.getShadowColor())
     autoPaddingEnabled: true
 
     ColorHelper {

@@ -1,5 +1,6 @@
 import QtQuick
 import org.kde.kirigami as Kirigami
+import "../../code/Theming.js" as Theming
 
 Item {
     property var theme: {
@@ -45,6 +46,15 @@ Item {
         if (theme === "dark")
             return Kirigami.ColorUtils.tintWithAlpha(color, "white", 0.1);
 
+    }
+
+    // the configurable color for `key` (Customization settings), `def` being what it is by default
+    function pick(config, key, def, ctx) {
+        return Theming.resolve(config, key, def, ctx);
+    }
+
+    function zoneCtx(zone, index, count) {
+        return Theming.zoneCtx(zone, index, count);
     }
 
     function tintWithAlpha(color, tint, alpha) {

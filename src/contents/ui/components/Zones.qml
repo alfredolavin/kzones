@@ -25,6 +25,8 @@ Item {
             property var renderZones: config.zoneOverlayIndicatorDisplay == 1 ? [config.layouts[layoutIndex].zones[index]] : config.layouts[layoutIndex].zones
             property int activeIndex: config.zoneOverlayIndicatorDisplay == 1 ? 0 : index
             property var indicatorPos: (modelData && modelData.indicator && modelData.indicator.position) || "center"
+            property var cfg: zones.config
+            property var zoneCtx: colorHelper.zoneCtx(modelData, index, config.layouts[layoutIndex].zones.length)
             property bool active: (highlightedZone == zoneIndex && currentLayout == layoutIndex)
 
             x: ((modelData.x / 100) * (clientArea.width - zonePadding)) + zonePadding
@@ -38,9 +40,9 @@ Item {
 
                 width: 160
                 height: 100
-                color: colorHelper.backgroundColor
+                color: colorHelper.pick(config, "indicatorBackground", colorHelper.backgroundColor, zoneCtx)
                 radius: 10
-                border.color: colorHelper.getBorderColor(color)
+                border.color: colorHelper.pick(config, "indicatorBorder", colorHelper.getBorderColor(color), zoneCtx)
                 border.width: 1
                 opacity: !showZoneOverlay ? 0 : (zoneSelector.expanded) ? 0 : (active ? 0.6 : 1)
                 scale: active ? 1.1 : 1
@@ -63,6 +65,9 @@ Item {
 
                 Components.Indicator {
                     zones: renderZones
+                    config: zone.cfg
+                    baseIndex: config.zoneOverlayIndicatorDisplay == 1 ? zoneIndex : 0
+                    total: config.layouts[layoutIndex].zones.length
                     activeZone: activeIndex
                     anchors.centerIn: parent
                     width: parent.width - 20
@@ -92,7 +97,7 @@ Item {
 
                 anchors.fill: parent
                 color: "transparent"
-                border.color: (active) ? modelData.color || colorHelper.accentColor : "transparent"
+                border.color: (active) ? colorHelper.pick(config, "highlightBorder", modelData.color || colorHelper.accentColor, zoneCtx) : "transparent"
                 border.width: 3
                 radius: 8
             }
@@ -103,13 +108,14 @@ Item {
 
                 opacity: (highlightedZone == zoneIndex) ? 0.1 : 0
                 anchors.fill: parent
-                color: modelData.color || colorHelper.accentColor
+                color: colorHelper.pick(config, "highlightFill", modelData.color || colorHelper.accentColor, zoneCtx)
                 radius: 8
             }
 
             // indicator shadow
             Components.Shadow {
                 target: zoneIndicator
+                config: zone.cfg
                 visible: zoneIndicator.visible
             }
 

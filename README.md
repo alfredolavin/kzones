@@ -154,9 +154,47 @@ Reduce the opacity of other windows while the active window is being moved.
 
 - Enable or disable this behavior.
 
+### QML settings and Customization
+
+KWin only lets a script's own settings page be a Qt Widgets `.ui` file, so the QML settings live in a small companion
+app (`make settings`, or `python3 settings/kzones_settings.py`; needs PyQt6). It edits the same `kwinrc` keys as the
+built-in page, adds a **Customization** tab, and can reload the script to apply changes.
+
+Customization sets the color of every part of the overlay (selector background/border/shadow, zone indicator
+background/border, the zones drawn inside the indicators, and the zone highlight border/fill). Each is a color that is
+either the default look, a fixed color, or a **vivid** OKLCH color derived from the zone's index or its position on the
+screen (horizontal, vertical or diagonal), adjustable in luminosity, chroma, hue offset and opacity. The color selector
+is the shared `colorspec` library (`plasmoids/shared`, copied in by `shared/sync.sh`).
+
 ### Layouts
 
 You can define your own layouts by modifying the JSON in the **Layouts** tab in the script settings, here are some examples to get you started:
+
+#### Visual Zone Editor
+
+Instead of hand-editing the JSON, you can lay out zones graphically with
+[`kzones-zone-editor`](tools/zone-editor), an installable companion app (not part of
+the packaged KWin script) that you run separately and then copy its output into the
+**Layouts** tab.
+
+```sh
+pipx install ./tools/zone-editor   # from a checkout of this repo
+# or, without cloning:
+pipx install "git+https://github.com/gerritdevriese/kzones.git#subdirectory=tools/zone-editor"
+
+kzones-zone-editor   # or: make zone-editor
+```
+
+Workflow:
+
+1. Click **Import JSON…** and paste your current Layouts JSON (copied from the
+   **Layouts** tab), or **Load from File…** to start from one of the
+   [`examples/`](examples) files.
+2. Draw zones by click-dragging on empty canvas space, move them by dragging their
+   body, resize via the bottom-right handle, and fine-tune with the arrow keys
+   (Shift+arrow for larger steps) or the numeric fields on the right.
+3. Click **Copy JSON to Clipboard**, then paste the result back into the **Layouts**
+   tab in `System Settings / Window Management / KWin Scripts / KZones / ⚙️`.
 
 #### Examples
 

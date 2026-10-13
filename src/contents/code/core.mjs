@@ -95,6 +95,18 @@ export function loadConfig() {
   config.windowSnapFontShadowColor = KWin.readConfig("windowSnapFontShadowColor", "#c0000000");
   config.windowSnapFontShadowSize = KWin.readConfig("windowSnapFontShadowSize", 6);
   config.layouts = layouts;
+
+  // Customization: per-entity colors (JSON map of color specs, see Theming.js) and the vivid color settings
+  try {
+    config.colorSpecs = JSON.parse(KWin.readConfig("colorSpecs", "{}")) || {};
+  } catch (e) {
+    config.colorSpecs = {};
+  }
+  config.colorizeBy = KWin.readConfig("colorizeBy", 0);
+  config.vividLightness = KWin.readConfig("vividLightness", 72);
+  config.vividChroma = KWin.readConfig("vividChroma", 17);
+  config.vividHueStart = KWin.readConfig("vividHueStart", 20);
+  config.vividHueRange = KWin.readConfig("vividHueRange", 360);
   config.filterMode = KWin.readConfig("filterMode", 0);
   config.filterList = KWin.readConfig("filterList", "");
   config.pollingRate = KWin.readConfig("pollingRate", 100);
