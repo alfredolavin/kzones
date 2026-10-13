@@ -38,16 +38,23 @@
             <default>1</default>
         </entry>
 
-        <entry name="requireToolboxShortcut" type="Bool">
-            <default>false</default>
-        </entry>
-
-        <entry name="defaultDragMode" type="Int">
+        <!-- 0: snap to other windows and the screen edges, 1: zones (zone selector, zone overlay, edge snapping) -->
+        <entry name="defaultMoveMode" type="Int">
             <default>0</default>
         </entry>
 
-        <entry name="toolboxModeOnMoveStart" type="Int">
+        <!-- 0: every move starts in the default mode, 1: keeps the mode used last -->
+        <entry name="moveModeOnMoveStart" type="Int">
             <default>0</default>
+        </entry>
+
+        <!-- screen corner that switches to the other mode while moving: 0 top left, 1 bottom left, 2 top right, 3 bottom right, 4 off -->
+        <entry name="moveModeSwitchCorner" type="Int">
+            <default>0</default>
+        </entry>
+
+        <entry name="moveModeSwitchCornerSize" type="Int">
+            <default>20</default>
         </entry>
 
         <entry name="rememberWindowGeometries" type="Bool">
@@ -77,19 +84,7 @@
         <!-- Window snapping guides -->
 
         <entry name="enableWindowSnapGuides" type="Bool">
-            <default>false</default>
-        </entry>
-
-        <entry name="windowSnapActivation" type="Int">
-            <default>1</default>
-        </entry>
-
-        <entry name="windowSnapActivationCorner" type="Int">
-            <default>0</default>
-        </entry>
-
-        <entry name="windowSnapCornerSize" type="Int">
-            <default>20</default>
+            <default>true</default>
         </entry>
 
         <entry name="windowSnapDistance" type="Int">

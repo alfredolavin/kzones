@@ -97,28 +97,27 @@ Edge Snapping allows you to snap windows to zones by dragging them to the edge o
 - Enable or disable edge snapping.
 - Set the distance from the edge of the screen at which the edge snapping will start to appear.
 
+#### Moving Windows
+
+Every window move starts in the **default moving mode**, set at the top of the General tab:
+
+- **Snap to other windows and the screen** (default): KWin's own snapping pulls the window against the edges of other windows and of the screen (`System Settings / Window Management / Window Behavior / Movement / Window snap zone` and `Screen edge snap zone`), and the [snapping guides](#window-snapping-guides) show what it is snapping to. The zone selector, zone overlay and edge snapping are off.
+- **Snap to zones**: the zone selector, zone overlay and edge snapping (whichever of them are enabled) work as described above.
+
+While moving you can switch to the other mode by moving the cursor into a screen corner (top left by default, can be disabled, and its size is configurable) or with the _Switch moving mode_ shortcut (<kbd>Meta</kbd> + <kbd>Z</kbd> by default). Choose whether the next move starts in the default mode again, or keeps the mode used last.
+
 #### Window Snapping Guides
 
-KWin can magnetically snap a window you move against the edges of other windows (`System Settings / Window Management / Window Behavior / Movement / Window snap zone`). With the snapping guides enabled, KZones shows which window it is snapping to. The settings are in the "Snapping Guides" tab.
+Shown in the _Snap to other windows and the screen_ moving mode. Settings are in the "Snapping Guides" tab.
 
 - Enable or disable the guides.
-- Choose when they activate: as soon as you start moving a window, or when the cursor reaches a screen corner (top left by default) while moving. Reaching the corner switches the rest of that move to the guides and hides the zone selector, zone overlay and edge snapping.
-- Choose the activation corner and how close to it the cursor must get.
 - Choose the effect:
-  - Highlight the window: the window is outlined with a configurable color, border width, glow and shadow. Its top border is replaced by a filled bar of the same color showing the window title. The bar's height matches the window's own title bar (automatic), or is a fixed height, or is the title's height plus a fixed padding. The title font family, size, boldness, color, glow and shadow are configurable.
+  - Highlight the window: the window is outlined with a configurable color, border width, glow and shadow. Its top border is replaced by a filled bar of the same color showing the window title. The bar's height matches the window's own title bar (automatic), or is a fixed height, or is the title's height plus a fixed padding. The title font family, size, boldness, color, glow and shadow are configurable. A snapped screen edge is marked with a bar in the same color.
   - Bring the window to the front: the window is temporarily raised just below the one you are moving, so you can see both. The original stacking order is restored when the target changes or the move ends.
   - Both.
-- Set the detection distance, or leave it at the default to use KWin's window snap zone.
+- Set the detection distance, or leave it at the default to use KWin's snap zones.
 
 Colors are written as `#RRGGBB` or `#AARRGGBB`.
-
-#### Require Toolbox Shortcut
-
-When enabled, the zone selector, zone overlay, edge snapping and window snapping guides (whichever of them are enabled) only appear while you move a window after toggling the toolbox on with the toggle toolbox shortcut (<kbd>Meta</kbd> + <kbd>Z</kbd> by default). Without the shortcut, a default mode is used instead.
-
-- Enable or disable this behavior.
-- Choose the default mode: no snapping, edge snapping, zone overlay, zone selector or window snapping guides.
-- Choose whether every window move starts in the default mode, or keeps the last used mode (in which case the shortcut can also be pressed before you start moving a window).
 
 #### Remember and restore window geometries
 
@@ -381,7 +380,7 @@ List of all available shortcuts:
 | Cycle layouts                             | <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>D</kbd>                    |
 | Cycle layouts (reversed)                  | <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>D</kbd> |
 | Toggle zone overlay                       | <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>C</kbd>                    |
-| Toggle toolbox                            | <kbd>Meta</kbd> + <kbd>Z</kbd>                                     |
+| Switch moving mode                        | <kbd>Meta</kbd> + <kbd>Z</kbd>                                     |
 | Activate layout                           | <kbd>Meta</kbd> + <kbd>Num 0-9</kbd>                               |
 | Move active window up                     | <kbd>Meta</kbd> + <kbd>Up</kbd>                                    |
 | Move active window down                   | <kbd>Meta</kbd> + <kbd>Down</kbd>                                  |

@@ -22,20 +22,20 @@ Item {
     property int highlightedZone: -1
     property var activeScreen: null
     property bool showZoneOverlay: config.zoneOverlayShowWhen == 0
-    // when the toolbox shortcut is required, the enabled features only show while the toolbox is toggled on, otherwise the
-    // configured default drag mode is used (0: no snapping, 1: edge snapping, 2: zone overlay, 3: zone selector, 4: window snapping guides)
-    property bool toolboxActive: false
-    // once the guides are switched on by reaching the activation corner, they take over the rest of the move
-    property bool windowSnapGuidesEnabled: config.requireToolboxShortcut ? (toolboxActive ? config.enableWindowSnapGuides : config.defaultDragMode == 4) : config.enableWindowSnapGuides
-    property bool windowSnapCornerReached: false
-    property bool windowSnapGuidesActive: windowSnapGuidesEnabled && (config.windowSnapActivation == 0 || windowSnapCornerReached)
-    property bool zoneSelectorActive: !windowSnapCornerReached && (config.requireToolboxShortcut ? (toolboxActive ? config.enableZoneSelector : config.defaultDragMode == 3) : config.enableZoneSelector)
-    property bool zoneOverlayActive: !windowSnapCornerReached && (config.requireToolboxShortcut ? (toolboxActive ? config.enableZoneOverlay : config.defaultDragMode == 2) : config.enableZoneOverlay)
-    property bool edgeSnappingActive: !windowSnapCornerReached && (config.requireToolboxShortcut ? (toolboxActive ? config.enableEdgeSnapping : config.defaultDragMode == 1) : config.enableEdgeSnapping)
-    // window snapping guides: the window being moved, the window it snaps to and its geometry mapped into the overlay
+    // moving mode, every window move starts in config.defaultMoveMode (or keeps the last one, see moveModeOnMoveStart):
+    // 0: snap to other windows and the screen edges, with guides, 1: zones (zone selector, zone overlay and edge snapping)
+    property int moveMode: 0
+    property bool cornerLatched: false
+    property bool windowSnapGuidesActive: moveMode == 0 && config.enableWindowSnapGuides
+    property bool zoneSelectorActive: moveMode == 1 && config.enableZoneSelector
+    property bool zoneOverlayActive: moveMode == 1 && config.enableZoneOverlay
+    property bool edgeSnappingActive: moveMode == 1 && config.enableEdgeSnapping
+    // window snapping guides: the window being moved, what it snaps to (a window, or null) and its geometry mapped into the overlay
     property var movingClient: null
     property var snapTarget: null
     property var snapTargetRect: Qt.rect(0, 0, 0, 0)
+    // screen edges the moving window snaps to, as rectangles in the overlay
+    property var snapEdges: []
     property var raisedSnapTarget: null
     property var stackingSnapshot: []
 
@@ -369,15 +369,36 @@ Item {
         return name;
     }
 
-    // whether the cursor is in the configured activation corner (0: top left, 1: bottom left, 2: top right, 3: bottom right)
-    function isCursorInWindowSnapCorner() {
-        const size = config.windowSnapCornerSize;
-        const corner = config.windowSnapActivationCorner;
+    // whether the cursor is in the screen corner that switches the moving mode (0: top left, 1: bottom left, 2: top right, 3: bottom right)
+    function isCursorInSwitchCorner() {
+        const size = config.moveModeSwitchCornerSize;
+        const corner = config.moveModeSwitchCorner;
+        if (corner > 3)
+            return false;
+
         const left = Workspace.cursorPos.x <= clientArea.x + size;
         const right = Workspace.cursorPos.x >= clientArea.x + clientArea.width - size;
         const top = Workspace.cursorPos.y <= clientArea.y + size;
         const bottom = Workspace.cursorPos.y >= clientArea.y + clientArea.height - size;
         return (corner == 0 && left && top) || (corner == 1 && left && bottom) || (corner == 2 && right && top) || (corner == 3 && right && bottom);
+    }
+
+    function setMoveMode(mode) {
+        if (mode === moveMode)
+            return ;
+
+        Utils.log("Moving mode " + mode);
+        moveMode = mode;
+        zoneSelector.expanded = false;
+        zoneSelector.near = false;
+        highlightedZone = -1;
+        if (moveMode != 0)
+            clearSnapGuides();
+
+    }
+
+    function moveModeName(mode) {
+        return mode == 0 ? "Snap to windows and screen" : "Snap to zones";
     }
 
     function isSnapCandidate(window, client) {
@@ -418,6 +439,42 @@ Item {
             }
         }
         return target;
+    }
+
+    // screen edges the moving client is snapping to, as rectangles in overlay coordinates
+    function findSnapEdges(client) {
+        const snapDistance = config.windowSnapDistance > 0 ? config.windowSnapDistance : (Options.borderSnapZone || 10);
+        const g = client.frameGeometry;
+        const a = clientArea;
+        const t = Math.max(1, config.windowSnapBorderWidth);
+        const edges = [];
+        if (Math.abs(g.x - a.x) <= snapDistance)
+            edges.push(Qt.rect(a.x, a.y, t, a.height));
+
+        if (Math.abs(g.x + g.width - (a.x + a.width)) <= snapDistance)
+            edges.push(Qt.rect(a.x + a.width - t, a.y, t, a.height));
+
+        if (Math.abs(g.y - a.y) <= snapDistance)
+            edges.push(Qt.rect(a.x, a.y, a.width, t));
+
+        if (Math.abs(g.y + g.height - (a.y + a.height)) <= snapDistance)
+            edges.push(Qt.rect(a.x, a.y + a.height - t, a.width, t));
+
+        return edges.map(r => {
+            const p = mainItem.mapFromGlobal(Qt.point(r.x, r.y));
+            return Qt.rect(p.x, p.y, r.width, r.height);
+        });
+    }
+
+    function setSnapEdges(edges) {
+        if (JSON.stringify(edges) !== JSON.stringify(snapEdges))
+            snapEdges = edges;
+
+    }
+
+    function clearSnapGuides() {
+        setSnapTarget(null);
+        setSnapEdges([]);
     }
 
     // put the windows that were above the raised snap target back above it, in their original order
@@ -515,11 +572,11 @@ Item {
                             client.frameGeometry = newGeometry;
                         }
                     }
-                    if (config.toolboxModeOnMoveStart == 0)
-                        toolboxActive = false;
+                    if (config.moveModeOnMoveStart == 0)
+                        setMoveMode(config.defaultMoveMode);
 
                     movingClient = client;
-                    windowSnapCornerReached = false;
+                    cornerLatched = isCursorInSwitchCorner();
                     stackingSnapshot = Array.from(Workspace.stackingOrder);
 
                     moving = true;
@@ -611,6 +668,7 @@ Item {
         Core.registerQMLComponent("root", root);
         Core.loadConfig();
         refreshClientArea();
+        moveMode = config.defaultMoveMode;
         // match all clients to zones and connect signals
         for (let i = 0; i < Workspace.stackingOrder.length; i++) {
             matchZone(Workspace.stackingOrder[i]);
@@ -635,9 +693,9 @@ Item {
             zoneSelector.near = false;
             highlightedZone = -1;
             showZoneOverlay = config.zoneOverlayShowWhen == 0;
-            setSnapTarget(null);
+            clearSnapGuides();
             movingClient = null;
-            windowSnapCornerReached = false;
+            cornerLatched = false;
             stackingSnapshot = [];
         }
 
@@ -672,14 +730,13 @@ Item {
                 onTriggered: {
                     refreshClientArea();
                     let hoveringZone = -1;
-                    // switch the move to the window snapping guides when the activation corner is reached
-                    if (windowSnapGuidesEnabled && config.windowSnapActivation == 1 && !windowSnapCornerReached && isCursorInWindowSnapCorner()) {
-                        Utils.log("Window snapping guides activated");
-                        windowSnapCornerReached = true;
-                        zoneSelector.expanded = false;
-                        zoneSelector.near = false;
-                        Utils.osd("Window snapping guides");
+                    // switch the moving mode each time the cursor enters the switch corner
+                    const inCorner = isCursorInSwitchCorner();
+                    if (inCorner && !cornerLatched) {
+                        setMoveMode(moveMode == 0 ? 1 : 0);
+                        Utils.osd(moveModeName(moveMode));
                     }
+                    cornerLatched = inCorner;
                     // zone overlay
                     const currentZones = repeaterLayout.itemAt(currentLayout);
                     if (zoneOverlayActive && showZoneOverlay && !zoneSelector.expanded)
@@ -750,16 +807,32 @@ Item {
                         }
                     }
                     // window snapping guides
-                    if (windowSnapGuidesActive && movingClient)
+                    if (windowSnapGuidesActive && movingClient) {
                         setSnapTarget(findSnapTarget(movingClient));
-                    else
-                        setSnapTarget(null);
+                        setSnapEdges(findSnapEdges(movingClient));
+                    } else {
+                        clearSnapGuides();
+                    }
                     // if hovering zone changed from the last frame
                     if (hoveringZone != highlightedZone) {
                         Utils.log("Highlighting zone " + hoveringZone + " in layout " + currentLayout);
                         highlightedZone = hoveringZone;
                     }
                 }
+            }
+
+            // screen edges the moving window snaps to
+            Repeater {
+                model: snapEdges
+
+                Components.SnapEdge {
+                    config: root.config
+                    x: modelData.x
+                    y: modelData.y
+                    width: modelData.width
+                    height: modelData.height
+                }
+
             }
 
             Loader {
@@ -874,24 +947,9 @@ Item {
             else
                 Utils.osd("The overlay can only be shown while moving a window");
         }
-        onToggleToolbox: {
-            if (!config.requireToolboxShortcut) {
-                Utils.osd("The toolbox shortcut is disabled");
-                return ;
-            }
-            if (!moving && config.toolboxModeOnMoveStart == 0) {
-                Utils.osd("The toolbox can only be toggled while moving a window");
-                return ;
-            }
-            toolboxActive = !toolboxActive;
-            if (!zoneSelectorActive) {
-                zoneSelector.expanded = false;
-                zoneSelector.near = false;
-            }
-            highlightedZone = -1;
-            if (!moving)
-                Utils.osd(toolboxActive ? "Toolbox will be shown on next move" : "Toolbox will be hidden on next move");
-
+        onSwitchMoveMode: {
+            setMoveMode(moveMode == 0 ? 1 : 0);
+            Utils.osd(moving || config.moveModeOnMoveStart == 1 ? moveModeName(moveMode) : moveModeName(moveMode) + " (every move starts in: " + moveModeName(config.defaultMoveMode) + ")");
         }
         onSwitchToNextWindowInCurrentZone: {
             switchWindowInZone(Workspace.activeWindow.zone, Workspace.activeWindow.layout);
@@ -984,6 +1042,7 @@ Item {
         //! still not working, hopefully it will at some point 😐
         function onConfigChanged() {
             Core.loadConfig();
+            moveMode = config.defaultMoveMode;
         }
 
         target: Options

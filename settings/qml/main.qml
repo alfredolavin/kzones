@@ -13,6 +13,7 @@ Kirigami.ApplicationWindow {
     height: Kirigami.Units.gridUnit * 38
 
     readonly property var defaults: ({
+        defaultMoveMode: 0, moveModeOnMoveStart: 0, moveModeSwitchCorner: 0, moveModeSwitchCornerSize: 20,
         enableZoneSelector: true, zoneSelectorTriggerDistance: 1,
         enableZoneOverlay: true, zoneOverlayShowWhen: 0, zoneOverlayHighlightTarget: 0, zoneOverlayIndicatorDisplay: 0,
         enableEdgeSnapping: false, edgeSnappingTriggerDistance: 1,
@@ -75,14 +76,25 @@ Kirigami.ApplicationWindow {
             QQC2.TabButton { text: "Advanced" }
         }
 
+        // a page is only created when its tab is first opened: the Layouts and Customization pages are heavy
         StackLayout {
             anchors.fill: parent
             currentIndex: tabs.currentIndex
-            GeneralPage {}
-            LayoutsPage {}
-            CustomizationPage {}
-            FiltersPage {}
-            AdvancedPage {}
+
+            component LazyPage: Loader {
+                required property int tab
+                required property Component page
+                property bool visited: false
+                active: visited || tabs.currentIndex === tab
+                onActiveChanged: if (active) visited = true
+                sourceComponent: page
+            }
+
+            LazyPage { tab: 0; page: Component { GeneralPage {} } }
+            LazyPage { tab: 1; page: Component { LayoutsPage {} } }
+            LazyPage { tab: 2; page: Component { CustomizationPage {} } }
+            LazyPage { tab: 3; page: Component { FiltersPage {} } }
+            LazyPage { tab: 4; page: Component { AdvancedPage {} } }
         }
 
         footer: QQC2.ToolBar {

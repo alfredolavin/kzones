@@ -26,6 +26,145 @@
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_4">
               <item>
+                <widget class="QGroupBox" name="groupBox_moving">
+                  <property name="title">
+                    <string>Moving Windows</string>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_moving">
+                    <item>
+                      <widget class="QLabel" name="label_movingExplanation">
+                        <property name="text">
+                          <string>Every window move starts in the default mode. While moving, switch to the other mode by moving the cursor into the chosen screen corner or with the "KZones: Switch moving mode" shortcut (Meta+Z by default). The zone selector, zone overlay and edge snapping below only work in the "Snap to zones" mode.</string>
+                        </property>
+                        <property name="wordWrap">
+                          <bool>true</bool>
+                        </property>
+                      </widget>
+                    </item>
+                    <item>
+                      <layout class="QFormLayout" name="formLayout_moving">
+                        <item row="0" column="0">
+                          <widget class="QLabel" name="label_defaultMoveMode">
+                            <property name="text">
+                              <string>Default moving mode</string>
+                            </property>
+                          </widget>
+                        </item>
+                        <item row="0" column="1">
+                          <widget class="QComboBox" name="kcfg_defaultMoveMode">
+                            <property name="sizePolicy">
+                              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                              </sizepolicy>
+                            </property>
+                            <item>
+                              <property name="text">
+                                <string>Snap to other windows and the screen</string>
+                              </property>
+                            </item>
+                            <item>
+                              <property name="text">
+                                <string>Snap to zones</string>
+                              </property>
+                            </item>
+                          </widget>
+                        </item>
+                        <item row="1" column="0">
+                          <widget class="QLabel" name="label_moveModeOnMoveStart">
+                            <property name="text">
+                              <string>When I start moving a window</string>
+                            </property>
+                          </widget>
+                        </item>
+                        <item row="1" column="1">
+                          <widget class="QComboBox" name="kcfg_moveModeOnMoveStart">
+                            <property name="sizePolicy">
+                              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                              </sizepolicy>
+                            </property>
+                            <item>
+                              <property name="text">
+                                <string>Always start in the default mode</string>
+                              </property>
+                            </item>
+                            <item>
+                              <property name="text">
+                                <string>Keep the mode used last</string>
+                              </property>
+                            </item>
+                          </widget>
+                        </item>
+                        <item row="2" column="0">
+                          <widget class="QLabel" name="label_moveModeSwitchCorner">
+                            <property name="text">
+                              <string>Switch mode in corner</string>
+                            </property>
+                          </widget>
+                        </item>
+                        <item row="2" column="1">
+                          <widget class="QComboBox" name="kcfg_moveModeSwitchCorner">
+                            <property name="sizePolicy">
+                              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                              </sizepolicy>
+                            </property>
+                            <item>
+                              <property name="text">
+                                <string>Top left</string>
+                              </property>
+                            </item>
+                            <item>
+                              <property name="text">
+                                <string>Bottom left</string>
+                              </property>
+                            </item>
+                            <item>
+                              <property name="text">
+                                <string>Top right</string>
+                              </property>
+                            </item>
+                            <item>
+                              <property name="text">
+                                <string>Bottom right</string>
+                              </property>
+                            </item>
+                            <item>
+                              <property name="text">
+                                <string>Disabled</string>
+                              </property>
+                            </item>
+                          </widget>
+                        </item>
+                        <item row="3" column="0">
+                          <widget class="QLabel" name="label_moveModeSwitchCornerSize">
+                            <property name="text">
+                              <string>Corner size</string>
+                            </property>
+                          </widget>
+                        </item>
+                        <item row="3" column="1">
+                          <widget class="QSpinBox" name="kcfg_moveModeSwitchCornerSize">
+                            <property name="suffix">
+                              <string> px</string>
+                            </property>
+                            <property name="minimum">
+                              <number>1</number>
+                            </property>
+                            <property name="maximum">
+                              <number>200</number>
+                            </property>
+                          </widget>
+                        </item>
+                      </layout>
+                    </item>
+                  </layout>
+                </widget>
+              </item>
+              <item>
                 <widget class="QGroupBox" name="kcfg_enableZoneSelector">
                   <property name="title">
                     <string>Enable Zone Selector</string>
@@ -264,104 +403,6 @@
                 </widget>
               </item>
               <item>
-                <widget class="QGroupBox" name="kcfg_requireToolboxShortcut">
-                  <property name="title">
-                    <string>Require Toolbox Shortcut</string>
-                  </property>
-                  <property name="checkable">
-                    <bool>true</bool>
-                  </property>
-                  <property name="checked">
-                    <bool>false</bool>
-                  </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_toolbox">
-                    <item>
-                      <widget class="QLabel" name="label_toolboxExplanation">
-                        <property name="text">
-                          <string>Only show the enabled zone selector, zone overlay, edge snapping and window snapping guides while the toolbox is toggled on with the "KZones: Toggle toolbox" shortcut (Meta+Z by default, configurable under System Settings / Shortcuts). Otherwise, the default mode below is used.</string>
-                        </property>
-                        <property name="wordWrap">
-                          <bool>true</bool>
-                        </property>
-                      </widget>
-                    </item>
-                    <item>
-                      <layout class="QFormLayout" name="formLayout_toolbox">
-                        <item row="0" column="0">
-                          <widget class="QLabel" name="label_defaultDragMode">
-                            <property name="text">
-                              <string>Default mode</string>
-                            </property>
-                          </widget>
-                        </item>
-                        <item row="0" column="1">
-                          <widget class="QComboBox" name="kcfg_defaultDragMode">
-                            <property name="sizePolicy">
-                              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                              </sizepolicy>
-                            </property>
-                            <item>
-                              <property name="text">
-                                <string>No snapping</string>
-                              </property>
-                            </item>
-                            <item>
-                              <property name="text">
-                                <string>Edge snapping</string>
-                              </property>
-                            </item>
-                            <item>
-                              <property name="text">
-                                <string>Zone overlay</string>
-                              </property>
-                            </item>
-                            <item>
-                              <property name="text">
-                                <string>Zone selector</string>
-                              </property>
-                            </item>
-                            <item>
-                              <property name="text">
-                                <string>Window snapping guides</string>
-                              </property>
-                            </item>
-                          </widget>
-                        </item>
-                        <item row="1" column="0">
-                          <widget class="QLabel" name="label_toolboxModeOnMoveStart">
-                            <property name="text">
-                              <string>When moving a window</string>
-                            </property>
-                          </widget>
-                        </item>
-                        <item row="1" column="1">
-                          <widget class="QComboBox" name="kcfg_toolboxModeOnMoveStart">
-                            <property name="sizePolicy">
-                              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                              </sizepolicy>
-                            </property>
-                            <item>
-                              <property name="text">
-                                <string>Always start in the default mode</string>
-                              </property>
-                            </item>
-                            <item>
-                              <property name="text">
-                                <string>Keep the last used mode</string>
-                              </property>
-                            </item>
-                          </widget>
-                        </item>
-                      </layout>
-                    </item>
-                  </layout>
-                </widget>
-              </item>
-              <item>
                 <widget class="QGroupBox" name="groupBox_snappingBehaviour">
                   <property name="title">
                     <string>Behaviour</string>
@@ -460,11 +501,14 @@
             <property name="checkable">
               <bool>true</bool>
             </property>
+            <property name="checked">
+              <bool>true</bool>
+            </property>
             <layout class="QVBoxLayout" name="verticalLayout_enableWindowSnapGuides">
           <item>
           <widget class="QLabel" name="label_windowSnapExplanation">
             <property name="text">
-              <string>While you move a window, KWin's own window snapping pulls it against the edges of nearby windows (System Settings / Window Management / Window Behavior / Movement / Window snap zone). The guides show which window it is snapping to. When activated by a screen corner, reaching that corner while moving a window switches the rest of that move to the guides, hiding the zone selector, zone overlay and edge snapping.</string>
+              <string>In the "Snap to windows and screen" moving mode, KWin's own snapping pulls the window you move against the edges of other windows and of the screen (System Settings / Window Management / Window Behavior / Movement / Window snap zone and Screen edge snap zone). The guides show what it is snapping to.</string>
             </property>
             <property name="wordWrap">
               <bool>true</bool>
@@ -474,85 +518,13 @@
           <item>
           <layout class="QFormLayout" name="formLayout_windowSnap">
           <item row="0" column="0">
-          <widget class="QLabel" name="label_windowSnapActivation">
-            <property name="text">
-              <string>Activate when</string>
-            </property>
-          </widget>
-          </item>
-          <item row="0" column="1">
-          <widget class="QComboBox" name="kcfg_windowSnapActivation">
-            <item>
-              <property name="text">
-                <string>I start moving a window</string>
-              </property>
-            </item>
-            <item>
-              <property name="text">
-                <string>The cursor reaches a screen corner</string>
-              </property>
-            </item>
-          </widget>
-          </item>
-          <item row="1" column="0">
-          <widget class="QLabel" name="label_windowSnapActivationCorner">
-            <property name="text">
-              <string>Corner</string>
-            </property>
-          </widget>
-          </item>
-          <item row="1" column="1">
-          <widget class="QComboBox" name="kcfg_windowSnapActivationCorner">
-            <item>
-              <property name="text">
-                <string>Top left</string>
-              </property>
-            </item>
-            <item>
-              <property name="text">
-                <string>Bottom left</string>
-              </property>
-            </item>
-            <item>
-              <property name="text">
-                <string>Top right</string>
-              </property>
-            </item>
-            <item>
-              <property name="text">
-                <string>Bottom right</string>
-              </property>
-            </item>
-          </widget>
-          </item>
-          <item row="2" column="0">
-          <widget class="QLabel" name="label_windowSnapCornerSize">
-            <property name="text">
-              <string>Corner size</string>
-            </property>
-          </widget>
-          </item>
-          <item row="2" column="1">
-          <widget class="QSpinBox" name="kcfg_windowSnapCornerSize">
-            <property name="suffix">
-              <string> px</string>
-            </property>
-            <property name="minimum">
-              <number>1</number>
-            </property>
-            <property name="maximum">
-              <number>200</number>
-            </property>
-          </widget>
-          </item>
-          <item row="3" column="0">
           <widget class="QLabel" name="label_windowSnapEffect">
             <property name="text">
               <string>Effect</string>
             </property>
           </widget>
           </item>
-          <item row="3" column="1">
+          <item row="0" column="1">
           <widget class="QComboBox" name="kcfg_windowSnapEffect">
             <item>
               <property name="text">
@@ -571,14 +543,14 @@
             </item>
           </widget>
           </item>
-          <item row="4" column="0">
+          <item row="1" column="0">
           <widget class="QLabel" name="label_windowSnapDistance">
             <property name="text">
               <string>Detection distance</string>
             </property>
           </widget>
           </item>
-          <item row="4" column="1">
+          <item row="1" column="1">
           <widget class="QSpinBox" name="kcfg_windowSnapDistance">
             <property name="suffix">
               <string> px</string>

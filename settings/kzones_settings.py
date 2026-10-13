@@ -12,6 +12,7 @@ import json
 import os
 import subprocess
 import sys
+from concurrent.futures import ThreadPoolExecutor
 
 from PyQt6.QtCore import QObject, QUrl, pyqtSlot
 from PyQt6.QtQml import QQmlApplicationEngine
@@ -40,13 +41,13 @@ class Backend(QObject):
     @pyqtSlot(str, result=str)
     def readAll(self, keys_json):
         """{key: value} for the given keys, missing ones left out (the caller has the defaults)."""
-        out = {}
-        for key in json.loads(keys_json):
+        # one kreadconfig6 process per key, started in parallel: run one after the other they take seconds to load
+        def read(key):
             r = _run("kreadconfig6", "--file", "kwinrc", "--group", GROUP, "--key", key, "--default", _UNSET)
-            value = r.stdout[:-1] if r.stdout.endswith("\n") else r.stdout
-            if value != _UNSET:
-                out[key] = value
-        return json.dumps(out)
+            return key, (r.stdout[:-1] if r.stdout.endswith("\n") else r.stdout)
+
+        with ThreadPoolExecutor(max_workers=16) as pool:
+            return json.dumps({k: v for k, v in pool.map(read, json.loads(keys_json)) if v != _UNSET})
 
     @pyqtSlot(str, str)
     def write(self, key, value):

@@ -21,6 +21,31 @@ QQC2.ScrollView {
     Kirigami.FormLayout {
         width: page.availableWidth
 
+        Kirigami.Separator { Kirigami.FormData.isSection: true; Kirigami.FormData.label: "Moving windows" }
+        Choice {
+            key: "defaultMoveMode"; Kirigami.FormData.label: "Default moving mode:"
+            model: ["Snap to other windows and the screen", "Snap to zones"]
+            QQC2.ToolTip.text: "Every window move starts in this mode. The zone selector, overlay and edge snapping below only work in the zones mode"
+            QQC2.ToolTip.visible: hovered
+            QQC2.ToolTip.delay: Kirigami.Units.toolTipDelay
+        }
+        Choice {
+            key: "moveModeOnMoveStart"; Kirigami.FormData.label: "When I start moving a window:"
+            model: ["Always start in the default mode", "Keep the mode used last"]
+        }
+        Choice {
+            key: "moveModeSwitchCorner"; Kirigami.FormData.label: "Switch mode in corner:"
+            model: ["Top left", "Bottom left", "Top right", "Bottom right", "Disabled"]
+        }
+        QQC2.SpinBox {
+            Kirigami.FormData.label: "Corner size:"
+            from: 1; to: 200
+            value: app.v.moveModeSwitchCornerSize
+            enabled: app.v.moveModeSwitchCorner < 4
+            onValueModified: app.set("moveModeSwitchCornerSize", value)
+            textFromValue: v => v + " px"
+        }
+
         Kirigami.Separator { Kirigami.FormData.isSection: true; Kirigami.FormData.label: "Zone selector" }
         Check { key: "enableZoneSelector"; text: "Enable the zone selector (appears when you drag a window to the top of the screen)" }
         Choice {

@@ -7,7 +7,7 @@ Item {
     signal moveActiveWindowToNextZone()
     signal moveActiveWindowToPreviousZone()
     signal toggleZoneOverlay()
-    signal toggleToolbox()
+    signal switchMoveMode()
     signal switchToNextWindowInCurrentZone()
     signal switchToPreviousWindowInCurrentZone()
     signal moveActiveWindowToZone(int zone)
@@ -66,11 +66,11 @@ Item {
     }
 
     ShortcutHandler {
-        name: "KZones: Toggle toolbox"
-        text: "KZones: Toggle toolbox"
+        name: "KZones: Switch moving mode"
+        text: "KZones: Switch moving mode"
         sequence: "Meta+Z"
         onActivated: {
-            toggleToolbox();
+            switchMoveMode();
         }
     }
 
