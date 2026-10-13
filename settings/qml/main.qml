@@ -88,6 +88,16 @@ Kirigami.ApplicationWindow {
                 active: visited || tabs.currentIndex === tab
                 onActiveChanged: if (active) visited = true
                 sourceComponent: page
+
+                // e.g. the Customization page needs the colorspec QML controls, which are no longer bundled
+                Kirigami.PlaceholderMessage {
+                    anchors.centerIn: parent
+                    width: parent.width - Kirigami.Units.gridUnit * 4
+                    visible: parent.status === Loader.Error
+                    text: "This page could not be loaded"
+                    explanation: "A QML component it needs is missing."
+                    icon.name: "dialog-error"
+                }
             }
 
             LazyPage { tab: 0; page: Component { GeneralPage {} } }

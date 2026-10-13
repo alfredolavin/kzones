@@ -163,7 +163,8 @@ Customization sets the color of every part of the overlay (selector background/b
 background/border, the zones drawn inside the indicators, and the zone highlight border/fill). Each is a color that is
 either the default look, a fixed color, or a **vivid** OKLCH color derived from the zone's index or its position on the
 screen (horizontal, vertical or diagonal), adjustable in luminosity, chroma, hue offset and opacity. The color selector
-is the shared `colorspec` library (`plasmoids/shared`, copied in by `shared/sync.sh`).
+uses the `colorspec` QML controls, which are not bundled with this repository: copy them to `settings/qml/colorspec/`
+for the Customization tab to work.
 
 ### Layouts
 
